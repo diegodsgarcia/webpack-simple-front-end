@@ -11,11 +11,6 @@ module.exports = {
   module: {
     rules: [
       {
-       test: /\.html$/,
-       loader: "raw-loader",
-       exclude: /node_modules/
-      },
-      {
         test: /\.sass$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
         exclude: /node_modules/
@@ -36,14 +31,13 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 3000,
-    hot: true,
+    hot: false,
     inline: true,
     open: true
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      inject: false
+      template: './src/index.html'
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin()

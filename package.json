@@ -1,7 +1,7 @@
 {
   "name": "simple-front-end",
   "version": "1.0.0",
-  "description": "Just a simple project front-end",
+  "description": "Just a simple project front-end with webpack",
   "scripts": {
     "dev": "webpack-dev-server --config webpack-dev.config.js",
     "prod": "npm run clean && webpack --config webpack-prod.config.js -p",
