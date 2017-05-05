@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
+
   entry: './src/app.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -11,7 +12,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.sass$/,
+        test: /\.s(a|c)ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
         exclude: /node_modules/
       },
@@ -19,6 +20,10 @@ module.exports = {
         test: /\.js$/,
         use: 'babel-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.html$/,
+        use: ['html-loader']
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -31,15 +36,16 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 3000,
-    hot: false,
+    hot: true,
     inline: true,
     open: true
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin()
+
   ]
 }
