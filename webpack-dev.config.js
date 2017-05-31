@@ -3,7 +3,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
-
   entry: './src/app.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -27,7 +26,7 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        use: 'file-loader?name=images/[path][name].[ext]',
+        use: 'file-loader?name=./src/images/[name].[ext]',
         exclude: /node_modules/
       }
     ]
@@ -44,7 +43,8 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
+      cache: false
     }),
 
   ]

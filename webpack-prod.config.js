@@ -1,6 +1,8 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CompressionPlugin = require("compression-webpack-plugin")
 const webpack = require('webpack')
 
 process.env.NODE_ENV = 'production'
@@ -28,12 +30,18 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        use: 'file-loader?name=images/[path][name].[ext]',
+        use: 'file-loader?name=./src/images/[name].[ext]',
         exclude: /node_modules/
       }
     ]
   },
   plugins: [
+    new CopyWebpackPlugin([
+      {
+        from: './src/images/',
+        to: 'images'
+      }
+    ]),
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
@@ -41,11 +49,20 @@ module.exports = {
       filename: 'style.css',
       allChunks: true
     }),
+    new webpack.optimize.CommonsChunkPlugin('common'),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
           warnings: false
       }
-    })
+    }),
+    new webpack.optimize.AggressiveMergingPlugin(),
+    new CompressionPlugin({
+			asset: "[path].gz[query]",
+			algorithm: "gzip",
+			test: /\.js$|\.css$|\.html$/,
+			threshold: 10240,
+			minRatio: 0.8
+		})
   ]
 }
