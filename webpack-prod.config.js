@@ -1,14 +1,12 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const CompressionPlugin = require("compression-webpack-plugin")
 const webpack = require('webpack')
 
 process.env.NODE_ENV = 'production'
 
 module.exports = {
-  entry: './src/app.js',
+  entry: './src/js/app.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js'
@@ -25,23 +23,36 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        use: 'babel-loader',
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['es2015']
+            }
+          }
+        ],
         exclude: /node_modules/
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        use: 'file-loader?name=./src/images/[name].[ext]',
+        test: /\.html$/,
+        use: ['html-loader']
+      },
+      {
+        test: /\.(jpg|png|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'images/'
+            }
+          }
+        ],
         exclude: /node_modules/
       }
     ]
   },
   plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: './src/images/',
-        to: 'images'
-      }
-    ]),
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
@@ -56,13 +67,6 @@ module.exports = {
           warnings: false
       }
     }),
-    new webpack.optimize.AggressiveMergingPlugin(),
-    new CompressionPlugin({
-			asset: "[path].gz[query]",
-			algorithm: "gzip",
-			test: /\.js$|\.css$|\.html$/,
-			threshold: 10240,
-			minRatio: 0.8
-		})
+    new webpack.optimize.AggressiveMergingPlugin()
   ]
 }

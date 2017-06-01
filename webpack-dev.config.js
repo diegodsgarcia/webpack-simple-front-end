@@ -3,10 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
-  entry: './src/app.js',
+  entry: './src/js/app.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js'
+    filename: 'bundle.js'
   },
   module: {
     rules: [
@@ -17,7 +17,14 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        use: 'babel-loader',
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['es2015']
+            }
+          }
+        ],
         exclude: /node_modules/
       },
       {
@@ -25,8 +32,16 @@ module.exports = {
         use: ['html-loader']
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/i,
-        use: 'file-loader?name=./src/images/[name].[ext]',
+        test: /\.(jpg|png|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'images/'
+            }
+          }
+        ],
         exclude: /node_modules/
       }
     ]
